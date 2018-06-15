@@ -1,14 +1,9 @@
-FROM ubuntu
-MAINTAINER bfosberry
+FROM alpine:3.7
 
-RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-    rsync
-
-RUN mkdir -p /data
-RUN chmod a+rw /data
-
+ENTRYPOINT ["/entrypoint"]
 EXPOSE 873
-ADD ./run /usr/local/bin/run
 
-ENTRYPOINT ["/usr/local/bin/run"]
+RUN mkdir -p /data && chmod a+rw /data
+RUN apk add --update --upgrade --no-cache rsync
+
+ADD run /entrypoint
